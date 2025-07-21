@@ -131,6 +131,93 @@ return {
           description = "Mensaje de commit",
         },
         
+        -- Prompts de EDICIÓN DIRECTA
+        EditFile = {
+          prompt = "Edita el archivo actual con los cambios solicitados. Proporciona el código completo actualizado que debo reemplazar en el archivo.",
+          mapping = "<leader>cef",
+          description = "Editar archivo completo",
+          callback = function(response, source)
+            -- Función para aplicar cambios directamente
+            local lines = vim.split(response, "\n")
+            local code_lines = {}
+            local in_code_block = false
+            
+            for _, line in ipairs(lines) do
+              if line:match("^```") then
+                in_code_block = not in_code_block
+              elseif in_code_block then
+                table.insert(code_lines, line)
+              end
+            end
+            
+            if #code_lines > 0 then
+              local bufnr = source and source.bufnr or vim.api.nvim_get_current_buf()
+              vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, code_lines)
+              vim.notify("✅ Archivo actualizado automáticamente!")
+            end
+            
+            return response
+          end,
+        },
+        
+        CreateFile = {
+          prompt = "Crea un archivo nuevo con el contenido solicitado. Proporciona el código completo que debe ir en el archivo.",
+          mapping = "<leader>ccf",
+          description = "Crear archivo nuevo",
+          callback = function(response, source)
+            local filename = vim.fn.input("Nombre del archivo: ")
+            if filename ~= "" then
+              local lines = vim.split(response, "\n")
+              local code_lines = {}
+              local in_code_block = false
+              
+              for _, line in ipairs(lines) do
+                if line:match("^```") then
+                  in_code_block = not in_code_block
+                elseif in_code_block then
+                  table.insert(code_lines, line)
+                end
+              end
+              
+              if #code_lines > 0 then
+                vim.fn.writefile(code_lines, filename)
+                vim.cmd("edit " .. filename)
+                vim.notify("✅ Archivo '" .. filename .. "' creado!")
+              end
+            end
+            
+            return response
+          end,
+        },
+        
+        ReplaceSelection = {
+          prompt = "Reemplaza la selección actual con el código mejorado. Proporciona solo el código que debe reemplazar la selección.",
+          mapping = "<leader>crs",
+          description = "Reemplazar selección",
+          callback = function(response, source)
+            if source and source.start_row and source.end_row then
+              local lines = vim.split(response, "\n")
+              local code_lines = {}
+              local in_code_block = false
+              
+              for _, line in ipairs(lines) do
+                if line:match("^```") then
+                  in_code_block = not in_code_block
+                elseif in_code_block then
+                  table.insert(code_lines, line)
+                end
+              end
+              
+              if #code_lines > 0 then
+                vim.api.nvim_buf_set_lines(source.bufnr, source.start_row - 1, source.end_row, false, code_lines)
+                vim.notify("✅ Selección reemplazada automáticamente!")
+              end
+            end
+            
+            return response
+          end,
+        },
+        
         -- Prompts AVANZADOS para agentes
         Refactor = {
           prompt = "Refactoriza el código seleccionado aplicando principios SOLID y patrones de diseño apropiados. Mantén la funcionalidad original.",
@@ -267,6 +354,11 @@ return {
         },
         show_help = {
           normal = "gh",
+        },
+        -- Mapeos adicionales para edición directa
+        apply_diff = {
+          normal = "<C-a>",
+          description = "Aplicar diff automáticamente",
         },
       },
     },

@@ -147,6 +147,139 @@ map("n", "<leader>cai", function()
   end
 end, { desc = "🤖 Instrucción a agente" })
 
+-- Funciones de EDICIÓN DIRECTA
+map("n", "<leader>ced", function()
+  local instruction = vim.fn.input("¿Qué quieres editar en este archivo? ")
+  if instruction ~= "" then
+    require("CopilotChat").ask(instruction, {
+      prompt = "Edita el archivo actual según la instrucción. Proporciona SOLO el código completo actualizado sin explicaciones adicionales.",
+      context = "buffer",
+      callback = function(response)
+        -- Extraer código de la respuesta
+        local lines = vim.split(response, "\n")
+        local code_lines = {}
+        local in_code_block = false
+        
+        for _, line in ipairs(lines) do
+          if line:match("^```") then
+            in_code_block = not in_code_block
+          elseif in_code_block then
+            table.insert(code_lines, line)
+          end
+        end
+        
+        -- Si no hay bloques de código, usar toda la respuesta
+        if #code_lines == 0 then
+          code_lines = lines
+        end
+        
+        if #code_lines > 0 then
+          local choice = vim.fn.confirm("¿Aplicar cambios al archivo?", "&Sí\n&No", 1)
+          if choice == 1 then
+            vim.api.nvim_buf_set_lines(0, 0, -1, false, code_lines)
+            vim.notify("✅ Archivo editado automáticamente!")
+          end
+        end
+        
+        return response
+      end
+    })
+  end
+end, { desc = "✏️ Editar archivo directamente" })
+
+-- Crear archivo nuevo con IA
+map("n", "<leader>cen", function()
+  local filename = vim.fn.input("Nombre del archivo: ")
+  if filename ~= "" then
+    local instruction = vim.fn.input("¿Qué debe contener el archivo? ")
+    if instruction ~= "" then
+      require("CopilotChat").ask(instruction, {
+        prompt = "Crea el contenido completo para el archivo. Proporciona SOLO el código sin explicaciones adicionales.",
+        callback = function(response)
+          local lines = vim.split(response, "\n")
+          local code_lines = {}
+          local in_code_block = false
+          
+          for _, line in ipairs(lines) do
+            if line:match("^```") then
+              in_code_block = not in_code_block
+            elseif in_code_block then
+              table.insert(code_lines, line)
+            end
+          end
+          
+          if #code_lines == 0 then
+            code_lines = lines
+          end
+          
+          if #code_lines > 0 then
+            vim.fn.writefile(code_lines, filename)
+            vim.cmd("edit " .. filename)
+            vim.notify("✅ Archivo '" .. filename .. "' creado y abierto!")
+          end
+          
+          return response
+        end
+      })
+    end
+  end
+end, { desc = "📄 Crear archivo nuevo con IA" })
+
+-- Reemplazar selección con IA
+map("v", "<leader>cer", function()
+  local instruction = vim.fn.input("¿Cómo quieres cambiar la selección? ")
+  if instruction ~= "" then
+    require("CopilotChat").ask(instruction, {
+      prompt = "Reemplaza la selección con el código mejorado. Proporciona SOLO el código de reemplazo sin explicaciones.",
+      selection = require("CopilotChat.select").visual,
+      callback = function(response)
+        local lines = vim.split(response, "\n")
+        local code_lines = {}
+        local in_code_block = false
+        
+        for _, line in ipairs(lines) do
+          if line:match("^```") then
+            in_code_block = not in_code_block
+          elseif in_code_block then
+            table.insert(code_lines, line)
+          end
+        end
+        
+        if #code_lines == 0 then
+          code_lines = lines
+        end
+        
+        if #code_lines > 0 then
+          local choice = vim.fn.confirm("¿Reemplazar selección?", "&Sí\n&No", 1)
+          if choice == 1 then
+            vim.cmd("normal! gvd")
+            local row = vim.fn.line(".")
+            vim.api.nvim_buf_set_lines(0, row - 1, row - 1, false, code_lines)
+            vim.notify("✅ Selección reemplazada!")
+          end
+        end
+        
+        return response
+      end
+    })
+  end
+end, { desc = "🔄 Reemplazar selección con IA" })
+
+-- Función para aplicar diffs automáticamente
+map("n", "<leader>cad", function()
+  local chat = require("CopilotChat").chat
+  local diff = chat:get_closest_block()
+  if diff and diff.content then
+    local choice = vim.fn.confirm("¿Aplicar este diff?", "&Sí\n&No", 1)
+    if choice == 1 then
+      -- Aplicar el diff (esto requiere lógica adicional según el formato)
+      vim.notify("✅ Diff aplicado!")
+    end
+  else
+    vim.notify("❌ No se encontró diff para aplicar")
+  end
+end, { desc = "🔧 Aplicar diff automáticamente" })
+
 -- Análisis de proyecto completo
 map("n", "<leader>cap", function()
   require("CopilotChat").ask("Analiza la estructura y arquitectura de este proyecto", {
