@@ -182,3 +182,37 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.tabstop = 2
   end,
 })
+
+-- GitHub Copilot settings
+vim.api.nvim_create_autocmd("FileType", {
+  group = augroup("copilot_settings"),
+  pattern = { "gitcommit", "gitrebase", "hgcommit", "svn", "cvs" },
+  callback = function()
+    vim.b.copilot_enabled = false
+  end,
+})
+
+-- Copilot Chat settings
+vim.api.nvim_create_autocmd("BufEnter", {
+  group = augroup("copilot_chat_settings"),
+  pattern = "copilot-*",
+  callback = function()
+    vim.opt_local.relativenumber = true
+    vim.opt_local.number = true
+    vim.opt_local.signcolumn = "no"
+  end,
+})
+
+-- Auto-enable Copilot for supported filetypes
+vim.api.nvim_create_autocmd("FileType", {
+  group = augroup("copilot_enable"),
+  pattern = {
+    "javascript", "typescript", "javascriptreact", "typescriptreact",
+    "python", "lua", "vim", "go", "rust", "java", "c", "cpp",
+    "html", "css", "scss", "json", "yaml", "toml", "markdown",
+    "sh", "bash", "zsh", "fish"
+  },
+  callback = function()
+    vim.b.copilot_enabled = true
+  end,
+})

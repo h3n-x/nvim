@@ -111,3 +111,23 @@ map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
 map("n", "<leader>mp", "<cmd>MarkdownPreview<cr>", { desc = "Markdown Preview" })
 map("n", "<leader>ms", "<cmd>MarkdownPreviewStop<cr>", { desc = "Markdown Preview Stop" })
 map("n", "<leader>mt", "<cmd>MarkdownPreviewToggle<cr>", { desc = "Markdown Preview Toggle" })
+
+-- GitHub Copilot keymaps
+map("n", "<leader>cp", "<cmd>Copilot panel<cr>", { desc = "Copilot Panel" })
+map("n", "<leader>cs", "<cmd>Copilot status<cr>", { desc = "Copilot Status" })
+map("n", "<leader>ce", "<cmd>Copilot enable<cr>", { desc = "Copilot Enable" })
+map("n", "<leader>cd", "<cmd>Copilot disable<cr>", { desc = "Copilot Disable" })
+map("n", "<leader>cS", "<cmd>Copilot setup<cr>", { desc = "Copilot Setup" })
+map("n", "<leader>ca", "<cmd>Copilot auth<cr>", { desc = "Copilot Auth" })
+map("n", "<leader>cv", "<cmd>Copilot version<cr>", { desc = "Copilot Version" })
+
+-- Copilot suggestions in insert mode (alternativas a Tab)
+map("i", "<M-l>", 'copilot#Accept("\\<CR>")', { expr = true, replace_keycodes = false, desc = "Accept Copilot suggestion" })
+map("i", "<M-j>", "<Plug>(copilot-next)", { desc = "Next Copilot suggestion" })
+map("i", "<M-k>", "<Plug>(copilot-previous)", { desc = "Previous Copilot suggestion" })
+map("i", "<M-h>", "<Plug>(copilot-dismiss)", { desc = "Dismiss Copilot suggestion" })
+map("i", "<M-s>", "<Plug>(copilot-suggest)", { desc = "Trigger Copilot suggestion" })
+
+-- Copilot word-level acceptance
+map("i", "<M-w>", "<Plug>(copilot-accept-word)", { desc = "Accept Copilot word" })
+map("i", "<M-e>", "<Plug>(copilot-accept-line)", { desc = "Accept Copilot line" })

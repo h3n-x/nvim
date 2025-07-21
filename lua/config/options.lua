@@ -60,3 +60,18 @@ opt.swapfile = false
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
+
+-- GitHub Copilot settings
+vim.g.copilot_no_tab_map = true
+vim.g.copilot_assume_mapped = true
+vim.g.copilot_tab_fallback = ""
+
+-- Copilot node command (ajustar según tu instalación de Node.js)
+-- vim.g.copilot_node_command = "node"
+
+-- Copilot proxy settings (si necesitas proxy)
+-- vim.g.copilot_proxy = "http://proxy.example.com:8080"
+-- vim.g.copilot_proxy_strict_ssl = false
+
+-- Configuración de workspace para Copilot
+vim.g.copilot_workspace_folders = { vim.fn.getcwd() }
