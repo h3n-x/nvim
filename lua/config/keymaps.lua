@@ -112,6 +112,40 @@ map("n", "<leader>mp", "<cmd>MarkdownPreview<cr>", { desc = "Markdown Preview" }
 map("n", "<leader>ms", "<cmd>MarkdownPreviewStop<cr>", { desc = "Markdown Preview Stop" })
 map("n", "<leader>mt", "<cmd>MarkdownPreviewToggle<cr>", { desc = "Markdown Preview Toggle" })
 
+-- System integration keymaps for Arch Linux + Hyprland
+map("n", "<leader>si", function()
+  if _G.system_info then
+    local info = string.format(
+      "System Info:\nMemory: %s\nCPU: %s\nDisk: %s\nUptime: %s",
+      _G.system_info.get_memory(),
+      _G.system_info.get_cpu(),
+      _G.system_info.get_disk(),
+      _G.system_info.get_uptime()
+    )
+    vim.notify(info, vim.log.levels.INFO, { title = "System Information" })
+  end
+end, { desc = "Show System Info" })
+
+-- Hyprland window management
+map("n", "<leader>wf", function()
+  if _G.hyprland then
+    _G.hyprland.toggle_floating()
+  end
+end, { desc = "Toggle Floating Window" })
+
+map("n", "<leader>wF", function()
+  if _G.hyprland then
+    _G.hyprland.toggle_fullscreen()
+  end
+end, { desc = "Toggle Fullscreen" })
+
+-- Quick system commands
+map("n", "<leader>sc", "<cmd>NotifySystem 'Neovim ready!'<cr>", { desc = "Send System Notification" })
+
+-- Oil file manager
+map("n", "<leader>e", "<cmd>Oil<cr>", { desc = "Open File Manager" })
+map("n", "<leader>E", "<cmd>Oil --float<cr>", { desc = "Open File Manager (Float)" })
+
 -- GitHub Copilot keymaps básicos
 map("n", "<leader>cps", "<cmd>Copilot status<cr>", { desc = "Copilot Status" })
 map("n", "<leader>cpe", "<cmd>Copilot enable<cr>", { desc = "Copilot Enable" })

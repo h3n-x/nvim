@@ -1,15 +1,18 @@
 # Configuración de Neovim con GitHub Copilot
 
-Esta es una configuración completa de Neovim basada en LazyVim con integración completa de GitHub Copilot, incluyendo **agentes de IA** y **ghost text** avanzado.
+Esta es una configuración completa de Neovim basada en LazyVim optimizada para **Arch Linux + Hyprland** con integración completa de GitHub Copilot, incluyendo **agentes de IA** y **ghost text** avanzado.
 
 ## Características principales
 
 - **LazyVim**: Configuración base moderna y eficiente
+- **Optimizado para Arch Linux + Hyprland**: Integración nativa con el sistema
 - **GitHub Copilot**: Autocompletado con IA integrado con **ghost text**
 - **Copilot Chat**: Interfaz de chat para interactuar con **agentes de IA**
 - **Agentes especializados**: Código, arquitectura, seguridad, debugging
 - **Soporte completo para múltiples lenguajes**: Python, JavaScript, TypeScript, Lua, etc.
 - **Tema personalizado**: Catppuccin con colores personalizados
+- **Herramientas de sistema**: Integración con pacman, AUR, y herramientas de Arch
+- **Gestión de ventanas Hyprland**: Controles nativos desde Neovim
 
 ## GitHub Copilot
 
@@ -246,6 +249,82 @@ El estado de Copilot se muestra en la barra de estado (lualine):
 - 🟡: Copilot procesando
 - 🔴: Copilot con problemas
 
+## 🏗️ **Nuevas funcionalidades para Arch Linux + Hyprland**
+
+### **Integración con el sistema:**
+- **Clipboard Wayland**: Soporte nativo para portapapeles en Wayland
+- **Notificaciones del sistema**: Integración con el daemon de notificaciones de Hyprland
+- **Gestión de ventanas**: Controles para ventanas flotantes y pantalla completa
+- **Información del sistema**: Monitor de memoria, CPU, disco y uptime
+
+### **Herramientas de Arch Linux:**
+- **Pacman**: `<leader>tp` - Actualizar sistema con pacman
+- **AUR**: `<leader>ta` - Actualizar paquetes AUR (yay/paru)
+- **Monitor del sistema**: `<leader>th` - Abrir htop
+- **Información del sistema**: `<leader>si` - Mostrar estadísticas
+
+### **Gestión de archivos mejorada:**
+- **Oil.nvim**: Explorador de archivos más rápido (`<leader>e`)
+- **Telescope optimizado**: Búsqueda con fd y ripgrep
+- **Mejor rendimiento**: Optimizaciones específicas para Arch
+
+### **Desarrollo avanzado:**
+- **Debugging completo**: DAP con UI visual
+- **Testing framework**: Neotest para múltiples lenguajes
+- **Git avanzado**: Diffview para comparaciones visuales
+- **Documentación**: Neogen para generar docs automáticamente
+
+### **Lenguajes adicionales:**
+- **Rust**: Rustaceanvim + Crates.nvim
+- **Go**: Go.nvim con debugging
+- **Mejor soporte**: Para todos los lenguajes populares
+
+### **UI mejorada:**
+- **Scrolling suave**: Neoscroll para mejor navegación
+- **Folding avanzado**: UFO para mejor manejo de código
+- **Color picker**: CCC para trabajar con colores
+- **Quickfix mejorado**: BQF para mejor experiencia
+
+### **Rendimiento optimizado:**
+- **Startup más rápido**: Impatient.nvim
+- **Gestión de memoria**: Garbage collection automático
+- **Profiling**: Herramientas para medir rendimiento
+- **Configuraciones específicas**: Para hardware de Arch Linux
+
+## 🎯 **Comandos específicos para Arch Linux:**
+
+```bash
+# Información del sistema
+<leader>si
+
+# Gestión de paquetes
+<leader>tp  # Actualizar con pacman
+<leader>ta  # Actualizar AUR
+
+# Hyprland
+<leader>wf  # Toggle ventana flotante
+<leader>wF  # Toggle pantalla completa
+
+# Sistema
+<leader>sc  # Enviar notificación del sistema
+```
+
+## 📦 **Dependencias recomendadas para Arch Linux:**
+
+```bash
+# Herramientas básicas
+sudo pacman -S ripgrep fd bat git curl
+
+# Desarrollo
+sudo pacman -S nodejs npm python python-pip go rust
+
+# AUR helper (elige uno)
+yay -S yay-bin  # o paru-bin
+
+# Herramientas opcionales
+sudo pacman -S htop neofetch tree
+```
+
 ## Instalación
 
 1. Clona esta configuración en tu directorio de Neovim:
@@ -284,12 +363,15 @@ El estado de Copilot se muestra en la barra de estado (lualine):
 ## Requisitos
 
 - Neovim >= 0.9.0
+- Arch Linux (recomendado)
+- Hyprland (para integración completa)
 - Node.js >= 16.0.0
 - Git
 - Cuenta de GitHub con acceso a Copilot
 - Ripgrep (para búsquedas)
 - Un terminal con soporte para colores verdaderos
 - curl >= 8.0.0 (recomendado)
+- fd (para búsqueda de archivos más rápida)
 
 ## Estructura de archivos
 
@@ -306,6 +388,12 @@ El estado de Copilot se muestra en la barra de estado (lualine):
 │       ├── coding.lua      # Plugins de codificación
 │       ├── colorscheme.lua # Tema de colores
 │       ├── copilot.lua     # GitHub Copilot (COMPLETO)
+│       ├── system-integration.lua # Integración con Arch/Hyprland
+│       ├── performance.lua # Optimizaciones de rendimiento
+│       ├── development.lua # Herramientas de desarrollo
+│       ├── ui-enhancements.lua # Mejoras de UI
+│       ├── lang-rust.lua   # Soporte para Rust
+│       ├── lang-go.lua     # Soporte para Go
 │       ├── editor.lua      # Plugins del editor
 │       ├── extras.lua      # Plugins adicionales
 │       ├── lang-*.lua      # Soporte para lenguajes
@@ -316,11 +404,21 @@ El estado de Copilot se muestra en la barra de estado (lualine):
 └── README.md               # Este archivo
 ```
 
+## 🚀 **Optimizaciones específicas para Arch Linux:**
+
+- **Clipboard Wayland**: Funciona perfectamente con Hyprland
+- **Notificaciones nativas**: Integración con notify-send
+- **Gestión de memoria**: Optimizada para sistemas Arch
+- **Paths del sistema**: Configurados para estructura de Arch
+- **Herramientas del sistema**: Integración con pacman y AUR
+
 ## Personalización
 
 Puedes personalizar la configuración editando los archivos en `lua/config/` y `lua/plugins/`. 
 
 Para modificar la configuración de Copilot y agentes, edita `lua/plugins/copilot.lua`.
+
+Para ajustar la integración con Hyprland, edita `lua/plugins/system-integration.lua`.
 
 ## Solución de problemas
 
@@ -328,6 +426,16 @@ Para modificar la configuración de Copilot y agentes, edita `lua/plugins/copilo
 1. Verifica que tengas una suscripción activa de GitHub Copilot
 2. Ejecuta `:Copilot status` para ver el estado
 3. Si es necesario, ejecuta `:Copilot setup` nuevamente
+
+### Problemas con Wayland/Hyprland
+1. Verifica que tengas las variables de entorno correctas
+2. Asegúrate de que `wl-clipboard` esté instalado
+3. Comprueba que Hyprland esté ejecutándose correctamente
+
+### Rendimiento lento
+1. Ejecuta `:StartupTime` para ver qué plugins tardan más
+2. Considera deshabilitar plugins que no uses
+3. Verifica que tengas suficiente RAM disponible
 
 ### Problemas de autenticación
 1. Ejecuta `:Copilot auth` para reautenticarte
@@ -352,3 +460,15 @@ Para modificar la configuración de Copilot y agentes, edita `lua/plugins/copilo
 ## Contribuir
 
 Si encuentras problemas o tienes sugerencias de mejora, por favor abre un issue o envía un pull request.
+
+## 🎉 **¡Tu Neovim ahora está completamente optimizado!**
+
+Esta configuración te proporciona:
+- ✅ **Integración completa** con Arch Linux + Hyprland
+- ✅ **GitHub Copilot avanzado** con agentes de IA
+- ✅ **Herramientas de desarrollo** profesionales
+- ✅ **Rendimiento optimizado** para tu sistema
+- ✅ **UI moderna** y funcional
+- ✅ **Soporte completo** para múltiples lenguajes
+
+¡Disfruta de tu experiencia de desarrollo mejorada! 🚀

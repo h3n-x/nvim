@@ -75,3 +75,55 @@ vim.g.copilot_tab_fallback = ""
 
 -- Configuración de workspace para Copilot
 vim.g.copilot_workspace_folders = { vim.fn.getcwd() }
+
+-- Arch Linux + Hyprland specific optimizations
+vim.opt.clipboard = "unnamedplus" -- Use system clipboard (Wayland compatible)
+vim.opt.mouse = "a" -- Enable mouse support
+vim.opt.mousemodel = "extend" -- Right-click extends selection
+
+-- Performance optimizations for Arch Linux
+vim.opt.updatetime = 250 -- Faster completion
+vim.opt.timeoutlen = 300 -- Faster key sequence timeout
+vim.opt.redrawtime = 10000 -- More time for syntax highlighting
+vim.opt.synmaxcol = 240 -- Don't highlight very long lines
+vim.opt.lazyredraw = false -- Don't redraw during macros (can cause issues)
+
+-- Better file handling for Arch Linux
+vim.opt.backup = false
+vim.opt.writebackup = false
+vim.opt.swapfile = false
+vim.opt.undofile = true
+vim.opt.undodir = vim.fn.stdpath("state") .. "/undo"
+
+-- Memory management
+vim.opt.maxmempattern = 20000 -- Increase pattern matching memory
+vim.opt.history = 1000 -- Command history
+
+-- Hyprland window integration
+vim.opt.title = true
+vim.opt.titlestring = "Neovim - %F"
+vim.opt.titlelen = 70
+
+-- Better search for large codebases
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.hlsearch = true
+vim.opt.incsearch = true
+
+-- File encoding for international support
+vim.opt.encoding = "utf-8"
+vim.opt.fileencoding = "utf-8"
+vim.opt.fileencodings = "utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936"
+
+-- Better diff mode
+vim.opt.diffopt:append("internal,algorithm:patience")
+vim.opt.diffopt:append("indent-heuristic")
+
+-- Arch Linux specific paths
+if vim.fn.executable("rg") == 1 then
+  vim.opt.grepprg = "rg --vimgrep --smart-case --follow"
+end
+
+if vim.fn.executable("fd") == 1 then
+  vim.env.FZF_DEFAULT_COMMAND = "fd --type f --hidden --follow --exclude .git"
+end
