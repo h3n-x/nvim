@@ -227,3 +227,4 @@ vim.api.nvim_create_autocmd("InsertEnter", {
     -- Asegurar que el ghost text sea visible
     vim.cmd("highlight CopilotSuggestion guifg=#6272a4 ctermfg=8")
   end,
+})
