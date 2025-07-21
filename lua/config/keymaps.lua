@@ -112,22 +112,53 @@ map("n", "<leader>mp", "<cmd>MarkdownPreview<cr>", { desc = "Markdown Preview" }
 map("n", "<leader>ms", "<cmd>MarkdownPreviewStop<cr>", { desc = "Markdown Preview Stop" })
 map("n", "<leader>mt", "<cmd>MarkdownPreviewToggle<cr>", { desc = "Markdown Preview Toggle" })
 
--- GitHub Copilot keymaps
-map("n", "<leader>cp", "<cmd>Copilot panel<cr>", { desc = "Copilot Panel" })
-map("n", "<leader>cs", "<cmd>Copilot status<cr>", { desc = "Copilot Status" })
-map("n", "<leader>ce", "<cmd>Copilot enable<cr>", { desc = "Copilot Enable" })
-map("n", "<leader>cd", "<cmd>Copilot disable<cr>", { desc = "Copilot Disable" })
-map("n", "<leader>cS", "<cmd>Copilot setup<cr>", { desc = "Copilot Setup" })
-map("n", "<leader>ca", "<cmd>Copilot auth<cr>", { desc = "Copilot Auth" })
-map("n", "<leader>cv", "<cmd>Copilot version<cr>", { desc = "Copilot Version" })
+-- GitHub Copilot keymaps básicos
+map("n", "<leader>cps", "<cmd>Copilot status<cr>", { desc = "Copilot Status" })
+map("n", "<leader>cpe", "<cmd>Copilot enable<cr>", { desc = "Copilot Enable" })
+map("n", "<leader>cpd", "<cmd>Copilot disable<cr>", { desc = "Copilot Disable" })
+map("n", "<leader>cpS", "<cmd>Copilot setup<cr>", { desc = "Copilot Setup" })
+map("n", "<leader>cpa", "<cmd>Copilot auth<cr>", { desc = "Copilot Auth" })
+map("n", "<leader>cpv", "<cmd>Copilot version<cr>", { desc = "Copilot Version" })
+map("n", "<leader>cpp", "<cmd>Copilot panel<cr>", { desc = "Copilot Panel" })
 
--- Copilot suggestions in insert mode (alternativas a Tab)
-map("i", "<M-l>", 'copilot#Accept("\\<CR>")', { expr = true, replace_keycodes = false, desc = "Accept Copilot suggestion" })
-map("i", "<M-j>", "<Plug>(copilot-next)", { desc = "Next Copilot suggestion" })
-map("i", "<M-k>", "<Plug>(copilot-previous)", { desc = "Previous Copilot suggestion" })
-map("i", "<M-h>", "<Plug>(copilot-dismiss)", { desc = "Dismiss Copilot suggestion" })
-map("i", "<M-s>", "<Plug>(copilot-suggest)", { desc = "Trigger Copilot suggestion" })
+-- GHOST TEXT - Sugerencias inline de Copilot (alternativas)
+map("i", "<M-l>", 'copilot#Accept("\\<CR>")', { expr = true, replace_keycodes = false, desc = "🤖 Aceptar sugerencia" })
+map("i", "<M-j>", "<Plug>(copilot-next)", { desc = "⬇️ Siguiente sugerencia" })
+map("i", "<M-k>", "<Plug>(copilot-previous)", { desc = "⬆️ Sugerencia anterior" })
+map("i", "<M-h>", "<Plug>(copilot-dismiss)", { desc = "❌ Descartar sugerencia" })
+map("i", "<M-s>", "<Plug>(copilot-suggest)", { desc = "💡 Activar sugerencia" })
 
--- Copilot word-level acceptance
-map("i", "<M-w>", "<Plug>(copilot-accept-word)", { desc = "Accept Copilot word" })
-map("i", "<M-e>", "<Plug>(copilot-accept-line)", { desc = "Accept Copilot line" })
+-- Aceptación parcial de sugerencias
+map("i", "<M-w>", "<Plug>(copilot-accept-word)", { desc = "📝 Aceptar palabra" })
+map("i", "<M-e>", "<Plug>(copilot-accept-line)", { desc = "📄 Aceptar línea" })
+
+-- Funciones avanzadas de CopilotChat
+map("n", "<leader>cai", function()
+  local input = vim.fn.input("Instrucción para el agente: ")
+  if input ~= "" then
+    require("CopilotChat").ask(input, {
+      agent = "copilot",
+      context = "buffer",
+      callback = function(response)
+        vim.notify("✅ Agente completó la tarea!")
+        return response
+      end
+    })
+  end
+end, { desc = "🤖 Instrucción a agente" })
+
+-- Análisis de proyecto completo
+map("n", "<leader>cap", function()
+  require("CopilotChat").ask("Analiza la estructura y arquitectura de este proyecto", {
+    context = {"files", "git:staged"},
+    agent = "copilot"
+  })
+end, { desc = "📊 Analizar proyecto" })
+
+-- Generar documentación
+map("n", "<leader>cad", function()
+  require("CopilotChat").ask("Genera documentación completa para este código", {
+    context = "buffer",
+    agent = "copilot"
+  })
+end, { desc = "📚 Generar documentación" })

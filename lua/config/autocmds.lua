@@ -192,7 +192,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Copilot Chat settings
+-- Copilot Chat settings mejorados
 vim.api.nvim_create_autocmd("BufEnter", {
   group = augroup("copilot_chat_settings"),
   pattern = "copilot-*",
@@ -200,6 +200,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
     vim.opt_local.relativenumber = true
     vim.opt_local.number = true
     vim.opt_local.signcolumn = "no"
+    vim.opt_local.conceallevel = 0
+    vim.opt_local.wrap = true
+    vim.opt_local.linebreak = true
   end,
 })
 
@@ -216,3 +219,11 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.b.copilot_enabled = true
   end,
 })
+
+-- Configuración específica para mejorar el ghost text
+vim.api.nvim_create_autocmd("InsertEnter", {
+  group = augroup("copilot_ghost_text"),
+  callback = function()
+    -- Asegurar que el ghost text sea visible
+    vim.cmd("highlight CopilotSuggestion guifg=#6272a4 ctermfg=8")
+  end,
